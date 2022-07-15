@@ -26,8 +26,17 @@ const App =  () =>{
       const file = formData.get('image') as File;
       if(file && file.size > 0){
         setUploading(true)
-        await Photos.insert(file)
+        let result = await Photos.insert(file)
           setUploading(false)
+        if (result instanceof Error){
+          alert(`${result.name} - ${result.message}`)
+        }
+        else{
+          let newPhotoList = [...photo];
+          newPhotoList.push(result)
+          setPhoto(newPhotoList);
+        }
+
 
       }
       else{
@@ -40,12 +49,11 @@ const App =  () =>{
     <C.Container>
       <C.Area>
         <C.Header> Galeria de Fotos</C.Header>
-
-        <C.UploadFrom method='FROM' onSubmit={handleForomSubmit}>
-          <input type='file' name='image'/>
-         <input type='submit' name='Enviar'/>
-
-        </C.UploadFrom>
+          <C.UploadFrom method='FROM' onSubmit={handleForomSubmit}>
+            <input type='file' name='image'/>
+            <input type='submit' name='Enviar'/>
+            {uploading && 'Enviando foto...'}
+          </C.UploadFrom>
 
         {loading &&<C.Loading>Carregando</C.Loading>}
          {!loading && photo.length > 0 &&
