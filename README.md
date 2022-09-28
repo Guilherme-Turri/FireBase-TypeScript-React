@@ -1,4 +1,4 @@
-# Firebase DB photos.
+# Google Firebase DB photos.
 
 ## About
 
